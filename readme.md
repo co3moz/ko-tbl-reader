@@ -1,24 +1,26 @@
-Knight Online Log Reader
+Knight Online TBL Reader
 ==============================
-Knight Online client creates log.klg but its encrypted with some algortihm. This simple software simply decodes it and outputs to stdout. It is quite fast.
+This simple application designed to read knight online tbl files. We do not support edit right now... There is an issue with 1886 tbl files, decrpytion doesn't work right. I hope some ppl helps about it :D
 
-![](doc.png)
+![](doc/cmd.gif)
 
 Install
 ----------------
 * install node.js
-* type in terminal `npm i ko-klg-reader -g`
+* type in terminal `npm i ko-tbl-reader -g`
 
 Usage
 -----------------
-* type in terminal `klgread log.klg`
+* type in terminal `tblread Zones.tbl`
 
 
 Tips
 ----------------
 
-You may create decrypted file by simply typing;
+You may create decrypted json by simply typing;
 
 ```sh
-klgread log.klg > log.decrypt.klg
+tblread -j Zones.tbl
 ```
+
+In future, we may support deconstruction with json.
