@@ -1,0 +1,32 @@
+{
+  "name": "ko-tbl-reader",
+  "version": "1.0.1",
+  "description": "Knight online tbl file reader",
+  "main": "lib/reader_direct.js",
+  "scripts": {
+    "test": "node test/test"
+  },
+  "bin": {
+    "klgread": "./bin/tblread.js"
+  },
+  "keywords": [
+    "knight",
+    "online",
+    "tbl",
+    "reader"
+  ],
+  "author": "co3moz",
+  "license": "MIT",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "commander": "^2.15.1",
+    "fs-extra": "^6.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.0.1",
+    "eslint-plugin-node": "^6.0.1"
+  },
+  "engines": {
+    "node": ">=10.4.0"
+  }
+}
