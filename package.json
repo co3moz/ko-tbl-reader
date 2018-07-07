@@ -1,6 +1,6 @@
 {
   "name": "ko-tbl-reader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Knight online tbl file reader",
   "main": "lib/reader_direct.js",
   "scripts": {

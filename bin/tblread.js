@@ -9,7 +9,7 @@ program
   .option('-j, --json', 'gives json output');
 
 program
-  .version('1.0.1')
+  .version('1.0.2')
   .parse(process.argv);
 
 
