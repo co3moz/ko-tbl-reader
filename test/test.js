@@ -4,6 +4,8 @@ const fs = require("fs");
 const path = require("path");
 const decryption = require("../lib/decryption/index.cjs");
 const { parse } = require("../lib/parser.cjs");
+const { walk } = require("../lib/header.cjs");
+const writer = require("../lib/writer.cjs");
 
 /**
  * Every fixture with the layout it must produce. A wrong key cannot pass:
@@ -72,10 +74,9 @@ async function main() {
       continue;
     }
 
-    let encryption, table;
+    let encryption, table, decrypted, extra;
     try {
-      let decrypted;
-      [encryption, decrypted] = await decryption(buffer);
+      [encryption, decrypted, extra] = await decryption(buffer);
       table = parse(decrypted, true);
     } catch (e) {
       console.log("FAIL " + file + ": " + e.message);
@@ -107,6 +108,29 @@ async function main() {
       }
     }
 
+
+    // Writing back: raw string bytes must reproduce the file exactly, and so
+    // must the euc-kr decoded strings (what `-j -k` gives) through the encoder.
+    const raw = walk(decrypted, 0, { collect: true });
+    const rebuilt = writer.toTbl(
+      { columns: raw.columns, rows: raw.rows },
+      { encryption: encryption, prefix: extra.prefix }
+    );
+    if (!rebuilt.equals(buffer)) {
+      problems.push("writing the raw table back does not give the same bytes");
+    }
+    try {
+      const fromKorean = writer.toTbl(
+        { columns: table.columns, rows: table.rows },
+        { encryption: encryption, prefix: extra.prefix, korean: true }
+      );
+      if (!fromKorean.equals(buffer)) {
+        problems.push("writing the euc-kr strings back does not give the same bytes");
+      }
+    } catch (e) {
+      problems.push("writing the euc-kr strings back failed: " + e.message);
+    }
+
     if (problems.length) {
       console.log("FAIL " + file + ": " + problems.join(", "));
       failed++;
@@ -118,6 +142,7 @@ async function main() {
       "ok   " + file.padEnd(24) + " " + encryption.padEnd(15) +
       String(table.columnCount).padStart(3) + " cols " +
       String(table.rowCount).padStart(5) + " rows " +
+      "round-trip " +
       (buffer.length / 1024).toFixed(1) + " KB"
     );
   }
