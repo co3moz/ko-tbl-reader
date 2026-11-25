@@ -44,6 +44,16 @@ field). Use `-e` to pick another one: `plain`, `standard`, `standard-0418` or
 npx ko-tbl-reader Zones.tbl -o Zones_plain.tbl -e plain
 ```
 
+Quick edits without json: `-s row.column=value` changes one cell (0 based,
+as the viewer shows them; the column may also be a detected name like `name`)
+and writes the file back in place, or to `-o` when given. Repeat it for more
+cells:
+
+```sh
+npx ko-tbl-reader Zones.tbl -s 3.3=x
+npx ko-tbl-reader Zones.tbl -s 3.3=x -s 0.name=Moradon -o Zones_new.tbl
+```
+
 Use `-k` on both sides when the strings are korean (euc-kr). `double` tables
 carry 5 unknown bytes in front of the table; the json keeps them as `prefix`
 so they are written back unchanged (zeros when missing).
